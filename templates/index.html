@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'favicon.png' %}" rel="icon" type="image/png">
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+</head>
+
+<body>
+
+    <header style="background-color:black;">
+        <div class="header_inner">
+            <form action="/search" method="POST">
+            {% csrf_token %}
+                <div class="left-side">
+                    
+                    <input type="text" name="username" placeholder="Search for username..">&nbsp; &nbsp;
+                    <button type="submit">
+                        <i class="fa fa-search fa-1x"></i>
+                    </button>
+
+                </div>
+            </form>
+
+
+            <div class="right-side lg:pr-4">
+
+                <!--greet with name-->
+
+                <p class="greet" style="color:black;font-size:25px;color:white;">.</p>
+                <b>
+                    <p style="color:black;font-size:25px;margin-left:15px;color:white;">{{user_profile.user}}</p>
+                </b>
+                
+                <!-- profile photo -->
+
+                <a href="#" style="margin-right:20px;">
+                    <img src="{{user_profile.profileimg.url}}" class="header-avatar" style="border:2px solid gray;" alt="">
+                </a>
+                <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+                    <ul>
+                        <li><a href="/settings"> Account setting </a> </li>
+                        <li><a href="/profile/{{user_profile.user}}"> My Profile </a> <li>
+                        <li><a href="logout"> Log Out</a></li>
+                    </ul>
+                </div>
+
+                
+
+                <!-- upload -->
+                <a href="#"
+                    class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                    <ion-icon name="add-circle" class="-mb-1
+                        mr-1 opacity-90 text-xl uilus-circle">
+                    </ion-icon> Upload Pics
+                </a>
+
+                    <!-- upload dropdown box -->
+                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+
+                    <!-- upload header -->
+                    <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                        <h4>Upload Pics</h4>
+                    </div>
+
+                    <!-- upload contents -->
+                    <div class="flex justify-center flex-center text-center">
+
+                        <div class="flex flex-col choose-upload text-center">
+                            
+                            
+                            <form action="upload" method="POST" enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            
+                                <div>
+                                    <input type="file" name="image_upload">
+                                    
+                                    <textarea class="button soft-warning small" name="caption" placeholder="caption..." ></textarea>
+                                    <br>
+                                    <button class="button bg-blue-700" type="submit" >Upload</button>
+                                </div>
+                            </form>
+
+                            
+                        </div>
+
+                    </div>
+
+                    <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
+                        Your Image size Must be Maxmium 999MB
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container m-auto">
+
+        <!-- left sidebar-->
+        <div class="space-y-8 flex-shrink-0" style="margin-left:180px;">
+
+            <!-- 1 post -->
+            {% for post in posts reversed %}
+            <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
+
+                <!-- post header-->
+                <div class="flex justify-between items-center px-4 py-3">
+
+                    <div class="flex flex-1 items-center space-x-4">
+                        <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>
+                    </div>
+                
+                </div>
+
+                <div uk-lightbox >
+                    <a href="{{post.image.url}}">  
+                        <img style="max-width:70%;" src="{{post.image.url}}" alt="">
+                    </a>
+                </div>
+                
+                <div class="py-3 px-4 space-y-3"> 
+                    
+                    <div class="flex space-x-4 lg:font-bold">
+
+                        <a href="/like-post?post_id={{post.id}}" class="flex items-center space-x-2">
+                            
+                            <div class="p-2 rounded-full text-black">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                </svg>
+
+                                {% if post.no_of_likes == 0 %}
+                                <p>No likes</p>
+                                {% elif post.no_of_likes == 1 %}
+                                <p>Liked by {{post.no_of_likes}} person</p>
+                                {% else %}
+                                <p>Liked by {{post.no_of_likes}} people</p>
+                                {% endif %}
+
+                            </div>
+                            
+                        </a>
+                        
+                    </div>
+
+                    <p>
+                        <a href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
+                    </p>
+
+                </div>
+
+                <hr>
+
+                <!--Comments-->
+                
+                <div style="margin:10px;">
+
+                    <!--add comment-->
+
+                    <form action="/postComment" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="comment" placeholder="comment here..." style="color:white;background-color:gray;">
+                        <input type="hidden" name="post.id" value="{{post.id}}" >
+
+                        <br>
+                        <input style="background-color:black;color:white;height:40px;widht:30px;hover-color:gray;" type="submit" value="Add comment">
+        
+                    </form>
+
+                    <hr>
+                    <br>
+                    
+                    <!--comment collection-->
+
+                    <div style="background-color:#F5F5F5;border-radius:5px;padding:5px;box-shadow: 1px 1px 10px darkgray;">
+                        <a><b style="color:black;font-size:25px;">Comments</b></a>
+                        
+                        {% for comment in comments %}
+                            {% if comment.post.id == post.id %}
+                            <p>
+                                <b style="color:gray;margin:5px;">{{comment.user}}</b>
+                                :<span> {{comment.comment}}</span>
+                            </p>
+                            {% endif %}
+                        {% endfor %}
+                        
+                    </div>
+
+                    <br>
+                </div>
+                
+            </div>
+            {% endfor %}
+
+        </div>    
+
+    </div>              
+    
+
+      
+    <script>
+        function greet(){
+            var timenow = new Date();
+            hour = timenow.getHours();
+        
+            
+            var greeting = document.getElementsByClassName("greet")[0];
+
+            if(hour >= 0 && hour <= 3){
+                greeting.innerHTML = "Good Night...";
+                
+            }
+            else if(hour <= 11){
+                greeting.innerHTML = "Good Morning...";
+            }
+            else if(hour <= 16){
+                greeting.innerHTML = "Good Afternoon...";
+            }
+            else{
+                greeting.innerHTML = "Good Evening...";
+            }
+        }
+        greet()
+
+    </script>
+
+
+
+
+ <!-- Scripts
+    ================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+</body>
+
+
+</html>

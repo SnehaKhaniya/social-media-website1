@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+	<meta charset="UTF-8">
+	<title>Login Page</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+	{% load static %}
+
+	<link rel="stylesheet" href="{% static 'style1.css' %}" />
+
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+</head>
+<body>
+
+
+<div class="box-form">
+	<div class="left">
+		<figure><br>
+			<img src="{% static 'images/iPhone-Black-Wallpaper-116-946x2048.jpg' %}" alt="">
+		</figure>
+		
+	</div>
+
+	
+	<form method="post" action="">
+		{% csrf_token %}
+		<div class="right">
+			<h5>Login</h5>
+			<p>Don't have an account? <a href="/signup">Creat Your Account</a> it takes less than a minute</p>
+			
+			<div class="inputs">
+				<input type="text" placeholder="Username" name="username" id="username" required>
+				<br>
+
+				<input type="password" placeholder="Password" name="password" id="password" required>
+
+			</div>
+
+			<br><br>
+			
+			{% if messages %}
+			{% for message in messages %}
+				<b class="messages" style="color:red;">{{message}}</b>
+			{% endfor %}
+			{% endif %}
+			<br><br>
+			<button type="submite">Login</button>
+		
+		</div>
+
+	</form>
+	
+</div>
+
+
+</body>
+</html>

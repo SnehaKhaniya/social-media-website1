@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+	<meta charset="UTF-8">
+	<title>Sign up Page</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+	{% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'style1.css' %}" />
+
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+</head>
+<body>
+
+	<div class="box-form">
+		<div class="left">
+			<figure><br>
+				<img src="{% static 'images/iPhone-Black-Wallpaper-116-946x2048.jpg' %}" alt="">
+			</figure>
+		</div>
+		
+		<form method="post" action="">
+			{% csrf_token %}
+			<div class="right">
+				<h5>Sign up</h5>
+				<p>have an account? <a href="/login">login</a></p>
+
+				<div class="inputs">
+					
+					<input type="text" placeholder="Email address" name="email" id="email" required>
+					<br>
+					
+					<input type="text" placeholder="Username" name="username" id="username" required>
+					<br>
+					
+					<input type="password" placeholder="Passowrd" name="password" id="password" required>
+					<br>
+					
+					<input type="password" placeholder="Confirm Password" name="password2" id="password2" required>
+					
+				</div>	
+				<br>
+				{% if messages %}
+				{% for message in messages %}
+					<b  style="color:red;">{{message}}</b>
+				{% endfor %}
+				{% endif %}
+				<br><br>
+				<button type="submit">Sign Up</button>
+
+			</div>
+			
+		</form>
+	</div>
+	
+</body>
+</html>
